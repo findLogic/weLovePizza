@@ -1,0 +1,11 @@
+.shopping-cart {
+  margin-left: 10px;
+  border: 1px solid green;
+  height: 20vh;
+
+   @media (max-width: 1280px) {
+   display: none;
+
+  }
+}
+

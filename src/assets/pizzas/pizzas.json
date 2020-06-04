@@ -1,0 +1,74 @@
+{
+  "peperoni": {
+    "name": "Pepperoni",
+    "id": "pizza-1",
+    "description": "Lots of pepperoni, and lots of cheese! This firm favourite deserves it’s place at the top of the WeLovePizzs list.",
+    "ingredients": ["Pizza sauce", "mozzarella", "pepperoni"]
+  },
+  "supreme": {
+    "name": "Supreme",
+    "id": "pizza-2",
+    "description": "Hot on the heels of pepperoni is Supreme, THE pizza I grew up with. The one rule I have about supreme? It’s gotta have at least TWO meats. Otherwise, it’s just another pizza.",
+    "ingredients": ["Pizza sauce","mozzarella","bacon"," onion","beef mince","capsicum","pepperoni","mushroom","olives"]
+  },
+  "hawaiian": {
+    "name": "Hawaiian (Ham & Pineapple)",
+    "id": "pizza-3",
+    "description": "If you think you don’t like Hawaiian pizza, that’s because you haven’t tried homemade! I used to be one of \"those people\".",
+    "ingredients": ["Pizza sauce", "mozzarella", "ham", "pineapple"]
+  },
+  "bbq": {
+    "name": "BBQ Meatlovers",
+    "id": "pizza-4",
+    "description": "You don’t even need to use a fancy BBQ sauce here. Any generic store bought BBQ sauce is fine – this one is all about the toppings!",
+    "ingredients": ["BBQ sauce", "mozzarella", "pepperoni", "bacon", "cabanossi", "beef mince", "ham"]
+  },
+  "garlicButterPrawnsAndChilli": {
+    "name": "Garlic Butter Prawns & Chilli",
+    "id": "pizza-5",
+    "description": "Huge Aussie favourite, a pizza topped with garlic prawns AND finished with a drizzle of garlic butter. Heaven in the form of a pizza!",
+    "ingredients": ["Pizza sauce", "mozzarella", "garlic butter prawns", "capsicum", "onion", "chilli", "rocket"]
+  },
+  "sausageAndKale": {
+    "name": "Sausage & Kale",
+    "id": "pizza-6",
+    "description": "If there was ever a way to get someone to eat kale, this is it!",
+    "ingredients": ["Pizza sauce", "mozzarella", "sausage", "kale"]
+  },
+  "margherita": {
+    "name": "Margherita",
+    "id": "pizza-7",
+    "description": "Classic Italian favourite, one of the best examples of how simple is best! This pizza truly is magnificent.",
+    "ingredients": ["Pizza sauce"," buffalo mozzarella", "basil", "olive oil", "salt"]
+  },
+  "capricciosa": {
+    "name": "Capricciosa (Ham, Artichoke, Mushrooms, Olives)",
+    "id": "pizza-8",
+    "description": "This is a magnificent combination and a firm WeLovePizza Family favourite!",
+    "ingredients": ["Pizza sauce", "mozzarella", "ham", "artichoke", "mushrooms", "olives"]
+  },
+  "quattroFormaggio": {
+    "name": "Quattro Formaggio (Four Cheese Pizza)",
+    "id": "pizza-9",
+    "description": "This combination of cheeses is just spectacular! The little pops of blue cheese is sheer perfection.",
+    "ingredients": ["mozzarella", "parmesan", "provolone", "blue cheese"]
+  },
+  "prosciuttoAndRocket": {
+    "name": "Prosciutto & rocket",
+    "id": "pizza-10",
+    "description": "Another firm favourite, paper thin slices of prosciutto is perfect paired with peppery rocket (arugula). I could eat this every day!",
+    "ingredients": ["Pizza sauce", "mozzarella", "prosciutto", "rocket/arugula", "extra virgin olive oil"]
+  },
+  "cheeseAndGarlic": {
+    "name": "Cheese & Garlic",
+    "id": "pizza-11",
+    "description": "Garlic bread – in pizza form! You’ll love the oregano flavour in this.",
+    "ingredients": ["Pizza sauce", "mozzarella", "garlic", "oregano"]
+  },
+  "potatoAndRosemary": {
+    "name": "Potato & Rosemary",
+    "id": "pizza-12",
+    "description": "Carb on carb perfection. The first pizza I request at every family pizza night! The pops of rosemary flavour in this is just divine.",
+    "ingredients": ["mozzarella", "potato", "fresh rosemary", "extra virgin olive oil"]
+  }
+}

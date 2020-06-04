@@ -1,0 +1,14 @@
+.pizza-list {
+  position: relative;
+  margin-top: 20px 0 !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr ;
+  grid-template-rows: auto;
+  grid-gap: 10px;
+
+  
+  @media (max-width: 800px) {
+   grid-template-columns: 1fr;
+
+  }
+}

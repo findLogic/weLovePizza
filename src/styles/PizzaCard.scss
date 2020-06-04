@@ -1,0 +1,29 @@
+.pizza-card {
+  text-align: center;
+  min-width: 300px;
+  border: 1px solid grey;
+  height: 500px;
+  border-radius: 5px;
+}
+
+.pizza-card p {
+  padding:0  10px ;
+  text-align: left;
+}
+
+.pizza-card .content {
+  padding: 0;
+  margin: 0;
+}
+
+.pizza-card h3 {
+  border-top: 1px solid #ccc;
+  padding: 0;
+  margin: 0;
+}
+
+.pizza-card .pizza-icons {
+  display: flex;
+  // align-items: flex-end;
+  // justify-content: start;
+}
