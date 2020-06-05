@@ -4,11 +4,13 @@ import '../styles/MainPage.scss';
 import PizzaList from './PizzaList';
 import ShoppingCart from './ShoppingCart';
 import ShoppingCartButton from './ShoppingCartButton';
+import PizzaFilter from './PizzaFilter';
 
 const MainPage = () => {
   return (
     <div className="ui container main-page">
       <SliderAd />
+      <PizzaFilter />
       <div className="content">
         <PizzaList />
         <div>

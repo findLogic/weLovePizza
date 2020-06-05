@@ -1,25 +1,53 @@
-import React from 'react';
-import '../styles/PizzaList.scss';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { fetchPizzas } from '../actions/';
+
 import PizzaCard from './PizzaCard';
+import '../styles/PizzaList.scss';
 import pizzas from '../assets/pizzas/pizzas.json';
 
-const PizzaList = () => {
+const PizzaList = ({ fetchPizzas, pizzas }) => {
+  useEffect(() => {
+    fetchPizzas();
+    console.log(pizzas);
+  }, []);
+
   const renderPizzas = () => {
-    return Object.keys(pizzas).map((pizza) => {
+    if (!pizzas) return;
+    return pizzas.map((pizza) => {
       return (
-        <div key={pizzas[pizza].id}>
+        <div key={pizza}>
           <PizzaCard
             pizza={pizza}
-            title={pizzas[pizza].name}
-            description={pizzas[pizza].description}
-            ingredients={pizzas[pizza].ingredients}
+            title={pizza.name}
+            description={pizza.description}
+            ingredients={pizza.ingredients}
           />
         </div>
       );
     });
   };
 
-  return <div className="pizza-list">{renderPizzas()}</div>;
+  let content;
+
+  if (!pizzas) {
+    content = (
+      <div class="ui segment">
+        <div class="ui active inverted dimmer">
+          <div class="ui text loader">Loading</div>
+        </div>
+        <p></p>
+      </div>
+    );
+  } else {
+    content = <div>{pizzas.length}</div>;
+  }
+
+  return <div>{renderPizzas()}</div>;
 };
 
-export default PizzaList;
+const mapStateToProps = (state) => ({
+  pizzas: state.pizzas,
+});
+
+export default connect(mapStateToProps, { fetchPizzas })(PizzaList);

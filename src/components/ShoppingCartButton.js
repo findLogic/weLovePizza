@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import '../styles/ShoppingCartButton.scss';
 
+// This button appears when window size < 1280px
+
 const ShoppingCartButton = (props) => {
   return ReactDOM.createPortal(
     <div className="shopping-cart-button">

@@ -42,13 +42,13 @@
     "ingredients": ["Pizza sauce"," buffalo mozzarella", "basil", "olive oil", "salt"]
   },
   "capricciosa": {
-    "name": "Capricciosa (Ham, Artichoke, Mushrooms, Olives)",
+    "name": "Capricciosa",
     "id": "pizza-8",
     "description": "This is a magnificent combination and a firm WeLovePizza Family favourite!",
     "ingredients": ["Pizza sauce", "mozzarella", "ham", "artichoke", "mushrooms", "olives"]
   },
   "quattroFormaggio": {
-    "name": "Quattro Formaggio (Four Cheese Pizza)",
+    "name": "Quattro Formaggio",
     "id": "pizza-9",
     "description": "This combination of cheeses is just spectacular! The little pops of blue cheese is sheer perfection.",
     "ingredients": ["mozzarella", "parmesan", "provolone", "blue cheese"]
