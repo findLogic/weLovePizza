@@ -4,25 +4,19 @@ import { fetchPizzas } from '../actions/';
 
 import PizzaCard from './PizzaCard';
 import '../styles/PizzaList.scss';
-import pizzas from '../assets/pizzas/pizzas.json';
 
 const PizzaList = ({ fetchPizzas, pizzas }) => {
   useEffect(() => {
     fetchPizzas();
-    console.log(pizzas);
   }, []);
 
   const renderPizzas = () => {
     if (!pizzas) return;
     return pizzas.map((pizza) => {
+      const properties = JSON.parse(pizza.properties);
       return (
-        <div key={pizza}>
-          <PizzaCard
-            pizza={pizza}
-            title={pizza.name}
-            description={pizza.description}
-            ingredients={pizza.ingredients}
-          />
+        <div key={pizza.id}>
+          <PizzaCard properties={properties} />
         </div>
       );
     });
@@ -32,7 +26,7 @@ const PizzaList = ({ fetchPizzas, pizzas }) => {
 
   if (!pizzas) {
     content = (
-      <div class="ui segment">
+      <div className="pizza-list-loading">
         <div class="ui active inverted dimmer">
           <div class="ui text loader">Loading</div>
         </div>
@@ -40,10 +34,10 @@ const PizzaList = ({ fetchPizzas, pizzas }) => {
       </div>
     );
   } else {
-    content = <div>{pizzas.length}</div>;
+    content = <>{renderPizzas()}</>;
   }
 
-  return <div>{renderPizzas()}</div>;
+  return <div className="pizza-list">{content}</div>;
 };
 
 const mapStateToProps = (state) => ({
