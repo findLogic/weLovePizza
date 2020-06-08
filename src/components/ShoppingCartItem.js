@@ -1,22 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { increacePizzaQuantity, decreasePizzaQuantity } from '../actions/';
+import {
+  increacePizzaQuantity,
+  decreasePizzaQuantity,
+  deleteItemFromCart,
+} from '../actions/';
 import '../styles/ShoppingCartItem.scss';
 
 const ShoppingCartItem = ({
   pizza,
   increacePizzaQuantity,
   decreasePizzaQuantity,
+  deleteItemFromCart,
+  currency,
 }) => {
   const {
     title,
+    price,
     id,
     crust,
     size,
     quantity,
     extraIngredients,
     removedIngredients,
-    price,
   } = pizza;
 
   const crustText = crust[0].toUpperCase() + crust.slice(1) + ' crust';
@@ -40,12 +46,19 @@ const ShoppingCartItem = ({
 
   // Price convert
   const convertPrice = (price) => {
-    return Math.round(price * 100) / 100;
+    return Math.floor(price * 100) / 100;
+  };
+
+  // Minus button handler
+  const handleMinusButton = (id) => {
+    quantity === 1 ? deleteItemFromCart(id) : decreasePizzaQuantity(id);
   };
 
   return (
     <div className="shopping-cart-item">
-      <div className="delete-cart-item-button">
+      <div
+        onClick={() => deleteItemFromCart(id)}
+        className="delete-cart-item-button">
         <i className="close icon small"></i>
       </div>
 
@@ -61,7 +74,7 @@ const ShoppingCartItem = ({
       <div className="cart-item-bottom">
         <div className="cart-item-value">
           <i
-            onClick={() => decreasePizzaQuantity(id)}
+            onClick={() => handleMinusButton(id)}
             className="icon minus circle small"></i>
           <div className="cart-item-value-number">{quantity}</div>
           <i
@@ -69,14 +82,20 @@ const ShoppingCartItem = ({
             className="icon plus circle small"></i>
         </div>
         <div className="cart-item-price">
-          {convertPrice(price * quantity)}
-          <i className="sign euro icon"></i>
+          {convertPrice(price * quantity).toFixed(2)}
+          <i className={`icon sign ${currency}`}></i>
         </div>
       </div>
     </div>
   );
 };
 
-export default connect(null, { increacePizzaQuantity, decreasePizzaQuantity })(
-  ShoppingCartItem,
-);
+const mapStateToProps = (state) => ({
+  currency: state.currency.activeCurrency,
+});
+
+export default connect(mapStateToProps, {
+  increacePizzaQuantity,
+  decreasePizzaQuantity,
+  deleteItemFromCart,
+})(ShoppingCartItem);

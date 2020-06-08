@@ -1,27 +1,34 @@
-import React from 'react';
-import '../styles/ShoppingCart.scss';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import ShoppingCartItem from './ShoppingCartItem';
+import { clearAllCartItems } from '../actions/';
+import '../styles/ShoppingCart.scss';
 
-const ShoppingCart = ({ total, pizzaArray }) => {
+const ShoppingCart = ({ total, pizzaArray, clearAllCartItems, currency }) => {
+  const [toggleShow, setToggleShow] = useState(true);
+
+  const displayStyle = { display: `${toggleShow ? 'block' : 'none'}` };
+
   const renderCartEmpty = () => (
-    <div className="cart-empty">
+    <div className="cart-empty" style={displayStyle}>
       <p>Your cart is empty.</p> Choose pizza and add it from menu.
     </div>
   );
 
   const renderCartNotEmpty = () => (
     <>
-      <div className="cart-items">
-        {pizzaArray.map((el) => {
-          return <ShoppingCartItem key={el.id} pizza={el} />;
-        })}
+      <div className="cart-items" style={displayStyle}>
+        {pizzaArray
+          .sort((a, b) => a.order - b.order)
+          .map((el) => {
+            return <ShoppingCartItem key={el.id} pizza={el} />;
+          })}
       </div>
 
       <div className="cart-bottom">
         <div>Total:</div>
         <div className="cart-total">
-          {total} <i className="sign euro icon"></i>
+          {total} <i className={`icon sign ${currency}`}></i>
         </div>
       </div>
     </>
@@ -29,6 +36,21 @@ const ShoppingCart = ({ total, pizzaArray }) => {
 
   const renderCart = () => {
     return pizzaArray.length > 0 ? renderCartNotEmpty() : renderCartEmpty();
+  };
+
+  const renderClearAllItems = () =>
+    pizzaArray.length ? (
+      <div onClick={() => clearAllCartItems()} className="clear-all-cart-items">
+        clear
+      </div>
+    ) : null;
+
+  const renderCaretIcon = () => {
+    return (
+      <i
+        onClick={() => setToggleShow(!toggleShow)}
+        className={`caret icon ${toggleShow ? 'up' : 'left'}`}></i>
+    );
   };
 
   return (
@@ -42,14 +64,13 @@ const ShoppingCart = ({ total, pizzaArray }) => {
           Cart
           {pizzaArray.length ? (
             <>
-              ({pizzaArray.length})
-              <i className="caret up icon" />
+              ({pizzaArray.length}){renderCaretIcon()}
             </>
           ) : (
-            <i className="caret up icon"></i>
+            renderCaretIcon()
           )}
         </div>
-        <div>clear</div>
+        {renderClearAllItems()}
       </div>
 
       <div className="cart-body">{renderCart()}</div>
@@ -60,6 +81,7 @@ const ShoppingCart = ({ total, pizzaArray }) => {
 const mapStateToProps = (state) => ({
   total: state.cart.total,
   pizzaArray: state.cart.pizzaArray,
+  currency: state.currency.activeCurrency,
 });
 
-export default connect(mapStateToProps)(ShoppingCart);
+export default connect(mapStateToProps, { clearAllCartItems })(ShoppingCart);

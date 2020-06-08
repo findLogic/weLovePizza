@@ -37,7 +37,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-
+    
   }
 
   & .cart-body {
@@ -53,6 +53,11 @@
     font-size: 20px;
     display: flex;
     justify-content: space-between;
+  }
+
+  & .clear-all-cart-items {
+    cursor: pointer;
+    color: #21ba45;
   }
 }
 

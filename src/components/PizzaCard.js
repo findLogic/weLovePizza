@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import '../styles/PizzaCard.scss';
 import WithPopup from './WithPopup';
 
-const PizzaCard = ({ properties, addPizzaToCart }) => {
+const PizzaCard = ({ properties, addPizzaToCart, currency }) => {
   // Props
   const {
     description,
@@ -20,7 +20,9 @@ const PizzaCard = ({ properties, addPizzaToCart }) => {
     spicy,
     vegan,
     image,
+    initPrice,
   } = properties;
+
   const bgImg = require(`../assets/pizzas/${image}`);
 
   // STATE
@@ -63,8 +65,8 @@ const PizzaCard = ({ properties, addPizzaToCart }) => {
       quantity: 1,
       extraIngredients: [],
       removedIngredients,
+      initPrice: initPrice[selectedSize],
       price: price[selectedSize],
-      noChanges: !removedIngredients.length,
     };
 
     setSelectedIngredients(
@@ -230,7 +232,7 @@ const PizzaCard = ({ properties, addPizzaToCart }) => {
           </div>
           <div className="card-price">
             {renderPrice()}
-            <i className="euro sign icon"></i>
+            <i className={`${currency} sign icon`}></i>
           </div>
         </div>
       </div>
@@ -238,4 +240,8 @@ const PizzaCard = ({ properties, addPizzaToCart }) => {
   );
 };
 
-export default connect(null, { addPizzaToCart })(PizzaCard);
+const mapStateToProps = (state) => ({
+  currency: state.currency.activeCurrency,
+});
+
+export default connect(mapStateToProps, { addPizzaToCart })(PizzaCard);

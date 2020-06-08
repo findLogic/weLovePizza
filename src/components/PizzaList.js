@@ -1,22 +1,22 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { fetchPizzas } from '../actions/';
+import { fetchPizzas, fetchCurrency } from '../actions/';
 
 import PizzaCard from './PizzaCard';
 import '../styles/PizzaList.scss';
 
-const PizzaList = ({ fetchPizzas, pizzas }) => {
+const PizzaList = ({ fetchPizzas, fetchCurrency, pizzas }) => {
   useEffect(() => {
-    fetchPizzas();
+    fetchCurrency();
+    fetchPizzas(1);
   }, []);
 
   const renderPizzas = () => {
     if (!pizzas) return;
     return pizzas.map((pizza) => {
-      const properties = JSON.parse(pizza.properties);
       return (
         <div key={pizza.id}>
-          <PizzaCard properties={properties} />
+          <PizzaCard properties={pizza.properties} />
         </div>
       );
     });
@@ -44,4 +44,6 @@ const mapStateToProps = (state) => ({
   pizzas: state.pizzas,
 });
 
-export default connect(mapStateToProps, { fetchPizzas })(PizzaList);
+export default connect(mapStateToProps, { fetchPizzas, fetchCurrency })(
+  PizzaList,
+);

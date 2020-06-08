@@ -6,7 +6,7 @@ import '../styles/ShoppingCartButton.scss';
 
 const ShoppingCartButton = (props) => {
   return ReactDOM.createPortal(
-    <div className="shopping-cart-button">
+    <div onClick={() => console.log(1)} className="shopping-cart-button">
       <i className="ui shopping cart icon"></i> 4321
       <i className="euro sign ui icon"></i>
     </div>,
