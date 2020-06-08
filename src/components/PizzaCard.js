@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import PizzaCardIngredient from './PizzaCardIngredient';
 import { addPizzaToCart } from '../actions/';
 import { connect } from 'react-redux';
 import '../styles/PizzaCard.scss';
+import WithPopup from './WithPopup';
 
 const PizzaCard = ({ properties, addPizzaToCart }) => {
+  // Props
   const {
     description,
     title,
@@ -20,6 +23,7 @@ const PizzaCard = ({ properties, addPizzaToCart }) => {
   } = properties;
   const bgImg = require(`../assets/pizzas/${image}`);
 
+  // STATE
   const [showIngredients, setShowIngredients] = useState(false);
   const [selectedCrust, setSelectedCrust] = useState(0);
   const [selectedSize, setSelectedSize] = useState(0);
@@ -27,12 +31,50 @@ const PizzaCard = ({ properties, addPizzaToCart }) => {
     ingredients.map((ing) => ({ ingredient: ing, isActive: true })),
   );
 
-  const [pizzaObj, setPizzaObj] = useState({});
-
+  // Helper methods and const
   const bgStyle = {
     background: `no-repeat center url(${bgImg})`,
   };
 
+  const toggleIngredient = (index) => {
+    setSelectedIngredients(
+      selectedIngredients.map((el, idx) => {
+        return index === idx
+          ? {
+              ingredient: el.ingredient,
+              isActive: !el.isActive,
+            }
+          : el;
+      }),
+    );
+  };
+
+  const handleAddToCart = () => {
+    const removedIngredients = [
+      ...selectedIngredients.filter((el) => !el.isActive),
+    ];
+
+    // Pizza object that goes to redux store
+    const pizzaObj = {
+      title,
+      id: uuidv4(),
+      crust: crust[selectedCrust],
+      size: size[selectedSize],
+      quantity: 1,
+      extraIngredients: [],
+      removedIngredients,
+      price: price[selectedSize],
+      noChanges: !removedIngredients.length,
+    };
+
+    setSelectedIngredients(
+      ingredients.map((ing) => ({ ingredient: ing, isActive: true })),
+    );
+    setShowIngredients(false);
+    addPizzaToCart(pizzaObj);
+  };
+
+  // Rendering methods
   const renderHit = () =>
     hit ? <div className="pizza-hit-new">Hit!</div> : '';
 
@@ -56,7 +98,20 @@ const PizzaCard = ({ properties, addPizzaToCart }) => {
       ''
     );
 
-  const renderPersons = () => 1;
+  const renderPersons = () => {
+    switch (size[selectedSize]) {
+      case 23:
+        return '1';
+      case 30:
+        return '1-2';
+      case 35:
+        return '2';
+      case 40:
+        return '2-3';
+      default:
+        return '1';
+    }
+  };
 
   const renderCrust = () => {
     return crust.map((el, idx) => {
@@ -88,19 +143,6 @@ const PizzaCard = ({ properties, addPizzaToCart }) => {
     return price[selectedSize];
   };
 
-  const toggleIngredient = (index) => {
-    setSelectedIngredients(
-      selectedIngredients.map((el, idx) => {
-        return index === idx
-          ? {
-              ingredient: el.ingredient,
-              isActive: !el.isActive,
-            }
-          : el;
-      }),
-    );
-  };
-
   const renderIngredients = () => {
     return selectedIngredients.map((ing, idx) => {
       return (
@@ -111,22 +153,6 @@ const PizzaCard = ({ properties, addPizzaToCart }) => {
         </div>
       );
     });
-  };
-
-  const handleAddToCart = () => {
-    const pizzaObj = {
-      title,
-      crust: crust[selectedCrust],
-      size: size[selectedSize],
-      quantity: 1,
-      extraIngredients: [],
-      removedIngredients: [],
-      price: price[selectedSize],
-    };
-
-    console.log(pizzaObj);
-
-    addPizzaToCart(pizzaObj);
   };
 
   return (
@@ -185,7 +211,9 @@ const PizzaCard = ({ properties, addPizzaToCart }) => {
           {renderVegan()}
           <div className="persons">
             {renderPersons()}
-            <i className="icon user "></i>
+            <WithPopup popupText="Number of persons">
+              <i className="icon user "></i>
+            </WithPopup>
           </div>
         </div>
         <div className="pizza-description">{description}</div>

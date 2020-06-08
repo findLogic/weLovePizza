@@ -39,6 +39,10 @@
     flex-direction: column;
 
   }
+
+  & .cart-body {
+    width: 100%;
+  }
   
   & .cart-bottom {
     border-top: 1px solid grey;
