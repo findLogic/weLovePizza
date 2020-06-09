@@ -1,0 +1,10 @@
+.navigation {
+
+  & .logo {
+    color: tomato;
+  }
+
+  & .item {
+    cursor: pointer;
+  }
+}

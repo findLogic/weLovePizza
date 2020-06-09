@@ -174,10 +174,10 @@ const PizzaCard = ({ properties, addPizzaToCart, currency }) => {
           <div className="ingredients-content-container">
             <p>REMOVE INGREDIENTS</p>
             {renderIngredients()}
-            <div className="add-new-ingredient">
+            {/* <div className="add-new-ingredient">
               <i className="plus circle icon"></i>
               Add ingredients
-            </div>
+            </div> */}
             <div className="ingredients-content-container-bottom">
               <div
                 className="cancel-btn"

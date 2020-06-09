@@ -1,5 +1,10 @@
 .footer {
-  height: 10vh;
-  border: 1px solid grey;
-  margin-top: 20px;
+  align-self: flex-end;
+  justify-self: flex-end;
+  margin-top: 40px !important;
+  background-color: grey !important;
+
+  & p {
+    color: #fff;
+  }
 }

@@ -60,3 +60,28 @@ export const changeCurrency = (currencyValue, currency) => ({
   type: TYPES.CHANGE_CURRENCY,
   payload: { currencyValue, currency },
 });
+
+// USER ACTIONS
+
+// Add a new USER
+export const addNewUser = (userObj) => async (dispatch) => {
+  await pizzasDB.post('/users', userObj);
+
+  dispatch({
+    type: TYPES.IS_LOGGED,
+  });
+};
+
+// Try to login
+export const tryToLoginUser = ({ login, password }) => async (dispatch) => {
+  const result = await pizzasDB
+    .get('/users')
+    .then((res) => res.data.filter((el) => el.login === login)[0].id)
+    .then((id) => pizzasDB.get('/users/' + id))
+    .then((res) => res.data[0].password === password);
+
+  dispatch({
+    type: TYPES.IS_LOGGED,
+    payload: result,
+  });
+};

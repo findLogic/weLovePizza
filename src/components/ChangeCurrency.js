@@ -6,9 +6,15 @@ import '../styles/ChangeCurrency.scss';
 const ChangeCurrency = ({ currency, changeCurrency }) => {
   const renderIcons = () => (
     <>
-      <i className={`icon sign ${currency === 'euro' ? 'euro' : 'dollar'}`}></i>
+      <i
+        className={`icon sign ${
+          currency.activeCurrency === 'euro' ? 'euro' : 'dollar'
+        }`}></i>
       <i className="icon arrow right"></i>
-      <i className={`icon sign ${currency === 'euro' ? 'dollar' : 'euro'}`}></i>
+      <i
+        className={`icon sign ${
+          currency.activeCurrency === 'euro' ? 'dollar' : 'euro'
+        }`}></i>
     </>
   );
 

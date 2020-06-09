@@ -1,17 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import history from '../history';
+import { connect } from 'react-redux';
 import '../styles/ShoppingCartButton.scss';
 
 // This button appears when window size < 1280px
 
-const ShoppingCartButton = (props) => {
+const ShoppingCartButton = ({ total, currency }) => {
+  if (total <= 0) return <></>;
   return ReactDOM.createPortal(
-    <div onClick={() => console.log(1)} className="shopping-cart-button">
-      <i className="ui shopping cart icon"></i> 4321
-      <i className="euro sign ui icon"></i>
+    <div
+      onClick={() => history.push('/order')}
+      className="shopping-cart-button">
+      <i className="ui shopping cart icon"></i>
+      {total}
+      <i className={`icon sign ${currency}`}></i>
     </div>,
     document.getElementById('ShoppingCartButton'),
   );
 };
 
-export default ShoppingCartButton;
+const mapStateToProps = (state) => ({
+  total: state.cart.total,
+  currency: state.currency.activeCurrency,
+});
+
+export default connect(mapStateToProps)(ShoppingCartButton);
