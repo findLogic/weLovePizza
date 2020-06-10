@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import Modal from '../HOC/Modal';
+import Modal from '../../hoc/Modal';
 import { connect } from 'react-redux';
 import RegisterForm from '../Form/RegisterForm/RegisterForm';
 import { addNewUser, tryToLoginUser } from '../../actions';
@@ -14,7 +14,6 @@ const NavigationMenu = ({
   loginForm,
   isLogged,
 }) => {
-  const [showRegModal, setShowRegModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   // useEffect(() => {
@@ -41,9 +40,9 @@ const NavigationMenu = ({
     return isLogged ? (
       ''
     ) : (
-      <div onClick={() => setShowRegModal(true)} className="ui item">
+      <NavLink to="/registration" className="ui item">
         Registration
-      </div>
+      </NavLink>
     );
   };
 
@@ -74,15 +73,7 @@ const NavigationMenu = ({
           </div>
         </div>
       </div>
-      <Modal
-        onDismiss={() => setShowRegModal(false)}
-        header="Registration Form:"
-        visible={showRegModal}>
-        <RegisterForm
-          initialValues={{ title: 'Register Form' }}
-          onSubmit={onRegSubmit}
-        />
-      </Modal>
+
       <Modal
         onDismiss={() => setShowLoginModal(false)}
         header="Please Enter Your Login And Password"

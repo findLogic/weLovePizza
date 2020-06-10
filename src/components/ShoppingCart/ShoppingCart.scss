@@ -22,10 +22,16 @@
     display: flex;
     justify-content: space-between;
 
+    & .cart-top-with-arrow {
+      display: flex;
+    }
+
     & i {
         cursor: pointer;
 
     }
+
+
   }
 
   & .cart-empty {

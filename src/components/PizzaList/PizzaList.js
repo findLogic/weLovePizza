@@ -8,7 +8,7 @@ import './PizzaList.scss';
 const PizzaList = ({ fetchPizzas, fetchCurrency, pizzas }) => {
   useEffect(() => {
     fetchCurrency();
-    fetchPizzas(1);
+    fetchPizzas(1); // fetch pizza with euro prices
   }, []);
 
   const renderPizzas = () => {

@@ -1,26 +1,27 @@
-import React, { useEffect } from 'react';
-import { Router, Route, Switch } from 'react-router-dom';
-import history from '../../history';
+import React, { useEffect, Suspense } from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
-import MainPage from '../Pages/MainPage/MainPage';
 import OrderPage from '../Pages/OrderPage/OrderPage';
-
-import NavigationMenu from '../NavigationMenu/NavigationMenu';
-import Footer from '../Footer/Footer';
+import Layout from '../../hoc/Layout';
 import './App.scss';
-import RegisterForm from '../Form/RegisterForm/RegisterForm';
+import RegistrationPage from '../Pages/RegistrationPage/RegistrationPage';
+import Loader from '../UI/Loader/Loader';
+const MainPage = React.lazy(() => import('../Pages/MainPage/MainPage'));
 
 const App = () => {
+  const routes = (
+    <Switch>
+      <Route path="/" exact component={MainPage} />
+      <Route path="/registration" exact component={RegistrationPage} />
+      <Route path="/order" exact component={OrderPage} />
+      <Redirect to="/" />
+    </Switch>
+  );
+
   return (
-    <Router history={history}>
-      <Route path="/" component={NavigationMenu} />
-      <Switch>
-        <Route path="/" exact component={MainPage} />
-        <Route path="/order" exact component={OrderPage} />
-        <Route path="/registration" exact component={RegisterForm} />
-      </Switch>
-      <Route path="/" component={Footer} />
-    </Router>
+    <Suspense fallback={<Loader />}>
+      <Layout>{routes}</Layout>
+    </Suspense>
   );
 };
 

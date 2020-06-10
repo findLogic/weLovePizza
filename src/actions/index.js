@@ -27,9 +27,9 @@ export const fetchCurrency = () => async (dispatch) => {
 // CART ACTIONS
 
 // Adding current pizza to cart
-export const addPizzaToCart = (pizzaObj) => ({
+export const addPizzaToCart = (pizzaObj, currencyValue) => ({
   type: TYPES.ADD_ITEM_TO_CART,
-  payload: pizzaObj,
+  payload: { pizzaObj, currencyValue },
 });
 
 // Increase quantity of pizza in cart by 1

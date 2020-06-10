@@ -4,9 +4,14 @@ import PizzaCardIngredient from './PizzaCardIngredient/PizzaCardIngredient';
 import { addPizzaToCart } from '../../../actions';
 import { connect } from 'react-redux';
 import './PizzaCard.scss';
-import WithPopup from '../../HOC/WithPopup';
+import WithPopup from '../../../hoc/WithPopup';
 
-const PizzaCard = ({ properties, addPizzaToCart, currency }) => {
+const PizzaCard = ({
+  properties,
+  addPizzaToCart,
+  currency,
+  activeCurrencyValue,
+}) => {
   // Props
   const {
     description,
@@ -72,8 +77,9 @@ const PizzaCard = ({ properties, addPizzaToCart, currency }) => {
     setSelectedIngredients(
       ingredients.map((ing) => ({ ingredient: ing, isActive: true })),
     );
+
     setShowIngredients(false);
-    addPizzaToCart(pizzaObj);
+    addPizzaToCart(pizzaObj, activeCurrencyValue);
   };
 
   // Rendering methods
@@ -85,17 +91,21 @@ const PizzaCard = ({ properties, addPizzaToCart, currency }) => {
 
   const renderSpicy = () =>
     spicy ? (
-      <div className="spicy">
-        <i className="icon hotjar"></i>
-      </div>
+      <WithPopup popupText={`It's spicy!`} position="top center">
+        <div className="spicy">
+          <i className="icon hotjar"></i>
+        </div>
+      </WithPopup>
     ) : (
       ''
     );
   const renderVegan = () =>
     vegan ? (
-      <div className="vegans">
-        <i className="icon leaf"></i>
-      </div>
+      <WithPopup popupText="Meat free!" position="top center">
+        <div className="vegans">
+          <i className="icon leaf"></i>
+        </div>
+      </WithPopup>
     ) : (
       ''
     );
@@ -121,8 +131,10 @@ const PizzaCard = ({ properties, addPizzaToCart, currency }) => {
         <div
           onClick={() => setSelectedCrust(idx)}
           key={idx + title + 'crust'}
-          className={`ui button ${selectedCrust === idx ? 'active' : ''}`}>
-          {el}
+          className={`ui button basic circular  ${
+            selectedCrust === idx ? 'secondary' : ''
+          }`}>
+          {el.toUpperCase()}
         </div>
       );
     });
@@ -134,7 +146,9 @@ const PizzaCard = ({ properties, addPizzaToCart, currency }) => {
         <div
           onClick={() => setSelectedSize(idx)}
           key={idx + title + 'size'}
-          className={`ui button ${selectedSize === idx ? 'active' : ''}`}>
+          className={`ui button circular basic ${
+            selectedSize === idx ? 'active' : ''
+          }`}>
           {el} cm
         </div>
       );
@@ -142,7 +156,7 @@ const PizzaCard = ({ properties, addPizzaToCart, currency }) => {
   };
 
   const renderPrice = () => {
-    return price[selectedSize];
+    return Math.round(initPrice[selectedSize] * activeCurrencyValue) / 100;
   };
 
   const renderIngredients = () => {
@@ -206,14 +220,14 @@ const PizzaCard = ({ properties, addPizzaToCart, currency }) => {
           <i className="ellipsis horizontal icon"></i>
         </div>
       </div>
-      <div className="content">
+      <div className="pizza-card-content">
         <div className="title">{title}</div>
         <div className="pizza-icons">
           {renderSpicy()}
           {renderVegan()}
           <div className="persons">
             {renderPersons()}
-            <WithPopup popupText="Number of persons">
+            <WithPopup popupText="Number of persons" position="top right">
               <i className="icon user "></i>
             </WithPopup>
           </div>
@@ -221,13 +235,15 @@ const PizzaCard = ({ properties, addPizzaToCart, currency }) => {
         <div className="pizza-description">{description}</div>
 
         <div className="pizza-crust">
-          <div className="two ui buttons">{renderCrust()}</div>
+          <div className="ui two buttons">{renderCrust()}</div>
         </div>
 
         <div className="pizza-radius">{renderRadius()}</div>
 
         <div className="card-footer">
-          <div onClick={() => handleAddToCart()} className="ui button green">
+          <div
+            onClick={() => handleAddToCart()}
+            className="ui button green circular big">
             ADD TO CART
           </div>
           <div className="card-price">
@@ -242,6 +258,7 @@ const PizzaCard = ({ properties, addPizzaToCart, currency }) => {
 
 const mapStateToProps = (state) => ({
   currency: state.currency.activeCurrency,
+  activeCurrencyValue: state.currency.activeCurrencyValue,
 });
 
 export default connect(mapStateToProps, { addPizzaToCart })(PizzaCard);

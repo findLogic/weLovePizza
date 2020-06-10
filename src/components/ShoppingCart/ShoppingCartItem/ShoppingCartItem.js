@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import {
   increacePizzaQuantity,
@@ -6,6 +6,7 @@ import {
   deleteItemFromCart,
 } from '../../../actions/';
 import './ShoppingCartItem.scss';
+import WithPopup from '../../../hoc/WithPopup';
 
 const ShoppingCartItem = ({
   pizza,
@@ -13,9 +14,11 @@ const ShoppingCartItem = ({
   decreasePizzaQuantity,
   deleteItemFromCart,
   currency,
+  activeCurrencyValue,
 }) => {
   const {
     title,
+    initPrice,
     price,
     id,
     crust,
@@ -45,21 +48,27 @@ const ShoppingCartItem = ({
   };
 
   // Price convert
-  const convertPrice = (price) => {
-    return Math.floor(price * 100) / 100;
+  const convertPrice = () => {
+    return ((initPrice * quantity * activeCurrencyValue) / 100).toFixed(2);
   };
 
   // Minus button handler
   const handleMinusButton = (id) => {
-    quantity === 1 ? deleteItemFromCart(id) : decreasePizzaQuantity(id);
+    quantity === 1
+      ? deleteItemFromCart({ id, activeCurrencyValue })
+      : decreasePizzaQuantity({ id, activeCurrencyValue });
   };
 
   return (
     <div className="shopping-cart-item">
       <div
-        onClick={() => deleteItemFromCart(id)}
+        onClick={() => deleteItemFromCart({ id, activeCurrencyValue })}
         className="delete-cart-item-button">
-        <i className="close icon small"></i>
+        <WithPopup
+          popupText={`Delete "${title}" from cart.`}
+          position="left center">
+          <i className="close icon small"></i>
+        </WithPopup>
       </div>
 
       <div className="cart-item-title">{title}</div>
@@ -73,16 +82,22 @@ const ShoppingCartItem = ({
 
       <div className="cart-item-bottom">
         <div className="cart-item-value">
-          <i
-            onClick={() => handleMinusButton(id)}
-            className="icon minus circle small"></i>
+          <WithPopup popupText={`Remove one "${title}"`} position="top center">
+            <i
+              onClick={() => handleMinusButton(id)}
+              className="icon minus circle small"></i>
+          </WithPopup>
           <div className="cart-item-value-number">{quantity}</div>
-          <i
-            onClick={() => increacePizzaQuantity(id)}
-            className="icon plus circle small"></i>
+          <WithPopup
+            position="top center"
+            popupText={`Add one more "${title}"`}>
+            <i
+              onClick={() => increacePizzaQuantity({ id, activeCurrencyValue })}
+              className="icon plus circle small"></i>
+          </WithPopup>
         </div>
         <div className="cart-item-price">
-          {convertPrice(price * quantity).toFixed(2)}
+          {convertPrice(price * quantity)}
           <i className={`icon sign ${currency}`}></i>
         </div>
       </div>
@@ -92,6 +107,7 @@ const ShoppingCartItem = ({
 
 const mapStateToProps = (state) => ({
   currency: state.currency.activeCurrency,
+  activeCurrencyValue: state.currency.activeCurrencyValue,
 });
 
 export default connect(mapStateToProps, {

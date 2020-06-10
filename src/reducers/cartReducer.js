@@ -20,31 +20,57 @@ const INITIAL_STATE = {
   pizzaOrder: 0,
 };
 
-// Total convert
-const convertTotal = (total) => {
-  return Math.floor(+total * 100) / 100;
+// Total count and convert
+const convertTotal = (pizzaArray, currencyValue = 1) => {
+  return (
+    Math.round(
+      pizzaArray
+        .map((el) => el.initPrice * el.quantity * currencyValue)
+        .reduce((acc, cur) => acc + cur, 0),
+    ) / 100
+  ).toFixed(2);
+};
+
+// add item to cart
+const addItemToCart = (state, action) => {
+  // Testing if there is same pizza in cart
+  if (testSamePizza(state, action).test) {
+    let testAction = testSamePizza(state, action);
+    return increaseItemQuantity(state, testAction);
+  }
+  // Just add new pizza to cart
+  const newPizzaArray = [
+    ...state.pizzaArray,
+    { ...action.payload.pizzaObj, order: state.pizzaOrder },
+  ];
+  return {
+    ...state,
+    total: convertTotal(newPizzaArray, action.payload.currencyValue),
+    pizzaArray: newPizzaArray,
+    pizzaOrder: state.pizzaOrder + 1,
+  };
 };
 
 // Test on same pizza obj
-// action.payload = pizzaObj
+// action.payload = {pizzaObj, currencyValue}
 const testSamePizza = (state, action) => {
   const { pizzaArray } = state;
-  const { payload } = action;
+  const { pizzaObj, currencyValue } = action.payload;
   const currentPizza = pizzaArray.filter((el) => {
     return (
-      el.title === payload.title &&
-      el.crust === payload.crust &&
-      el.size === payload.size &&
+      el.title === pizzaObj.title &&
+      el.crust === pizzaObj.crust &&
+      el.size === pizzaObj.size &&
       JSON.stringify(el.extraIngredients) ===
-        JSON.stringify(payload.extraIngredients) &&
+        JSON.stringify(pizzaObj.extraIngredients) &&
       JSON.stringify(el.removedIngredients) ===
-        JSON.stringify(payload.removedIngredients)
+        JSON.stringify(pizzaObj.removedIngredients)
     );
   });
   if (currentPizza[0]) {
     return {
       test: true,
-      payload: currentPizza[0].id,
+      payload: { id: currentPizza[0].id, currencyValue },
     };
   }
   return { test: false };
@@ -56,21 +82,20 @@ const findPizzaIndex = (pizzaArray, id) => {
 };
 
 // Increase item quantity by 1
-// action.payload = id ///////////////////////
+// action.payload = {id , currencyValue}
 const increaseItemQuantity = (state, action) => {
-  let index = findPizzaIndex(state.pizzaArray, action.payload);
+  let index = findPizzaIndex(state.pizzaArray, action.payload.id);
+  const newPizzaArray = [
+    ...state.pizzaArray.filter((el) => el.id !== action.payload.id),
+    {
+      ...state.pizzaArray[index],
+      quantity: state.pizzaArray[index].quantity + 1,
+    },
+  ];
   return {
     ...state,
-    total: convertTotal(+state.total + +state.pizzaArray[index].price).toFixed(
-      2,
-    ),
-    pizzaArray: [
-      ...state.pizzaArray.filter((el) => el.id !== action.payload),
-      {
-        ...state.pizzaArray[index],
-        quantity: state.pizzaArray[index].quantity + 1,
-      },
-    ],
+    total: convertTotal(newPizzaArray, action.payload.currencyValue),
+    pizzaArray: newPizzaArray,
   };
 };
 
@@ -78,60 +103,59 @@ const increaseItemQuantity = (state, action) => {
 // action.payload = id
 const deleteItemFromCart = (state, action) => {
   const newPizzaArray = state.pizzaArray.filter(
-    (el) => el.id !== action.payload,
+    (el) => el.id !== action.payload.id,
   );
 
   return {
     ...state,
-    total: convertTotal(
-      newPizzaArray.reduce(
-        (acc, current) => +acc + +current.quantity * current.price,
-        0,
-      ),
-    ).toFixed(2),
+    total: convertTotal(newPizzaArray, action.payload.activeCurrencyValue),
     pizzaArray: newPizzaArray,
   };
 };
 
 // Decrease pizza quantity by 1
 const decreasePizzaQuantity = (state, action) => {
+  const newPizzaArray = [
+    ...state.pizzaArray.filter((el) => el.id !== action.payload.id),
+    {
+      ...state.pizzaArray[findPizzaIndex(state.pizzaArray, action.payload.id)],
+      quantity:
+        state.pizzaArray[findPizzaIndex(state.pizzaArray, action.payload.id)]
+          .quantity - 1,
+    },
+  ];
   return {
     ...state,
-    total: convertTotal(
-      +state.total -
-        +state.pizzaArray[findPizzaIndex(state.pizzaArray, action.payload)]
-          .price,
-    ),
-    pizzaArray: [
-      ...state.pizzaArray.filter((el) => el.id !== action.payload),
-      {
-        ...state.pizzaArray[findPizzaIndex(state.pizzaArray, action.payload)],
-        quantity:
-          state.pizzaArray[findPizzaIndex(state.pizzaArray, action.payload)]
-            .quantity - 1,
-      },
-    ],
+    total: convertTotal(newPizzaArray, action.payload.currencyValue),
+    pizzaArray: newPizzaArray,
+  };
+};
+
+const changeCurrency = (state, action) => {
+  return {
+    ...state,
+    total: convertTotal(state.pizzaArray, action.payload.currencyValue),
+    pizzaArray: state.pizzaArray.map((el) => ({
+      ...el,
+      price: Math.round(
+        (el.initPrice * action.payload.currencyValue) / 100,
+      ).toFixed(2),
+    })),
+  };
+};
+
+// clear all cart items
+const clearAllCartItems = (state, action) => {
+  return {
+    ...state,
+    ...INITIAL_STATE,
   };
 };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case TYPES.ADD_ITEM_TO_CART:
-      // Testing if there is same pizza in cart
-      if (testSamePizza(state, action).test) {
-        let testAction = testSamePizza(state, action);
-        return increaseItemQuantity(state, testAction);
-      }
-      // Just add new pizza to cart
-      return {
-        ...state,
-        total: convertTotal(+state.total + +action.payload.price).toFixed(2),
-        pizzaArray: [
-          ...state.pizzaArray,
-          { ...action.payload, order: state.pizzaOrder },
-        ],
-        pizzaOrder: state.pizzaOrder + 1,
-      };
+      return addItemToCart(state, action);
     case TYPES.INCREACE_ITEM_QUANTITY:
       return increaseItemQuantity(state, action);
     case TYPES.DECREASE_ITEM_QUANTITY:
@@ -139,30 +163,9 @@ export default (state = INITIAL_STATE, action) => {
     case TYPES.DELETE_ITEM_FROM_CART:
       return deleteItemFromCart(state, action);
     case TYPES.CLEAR_ALL_CART_ITEMS:
-      return {
-        ...state,
-        ...INITIAL_STATE,
-      };
+      return clearAllCartItems(state, action);
     case TYPES.CHANGE_CURRENCY:
-      return {
-        ...state,
-        total: convertTotal(
-          state.pizzaArray.reduce(
-            (acc, current) =>
-              +acc +
-              +current.initPrice *
-                +action.payload.currencyValue *
-                current.quantity,
-            0,
-          ) / 100,
-        ).toFixed(2),
-        pizzaArray: state.pizzaArray.map((el) => ({
-          ...el,
-          price: ((el.initPrice * action.payload.currencyValue) / 100).toFixed(
-            2,
-          ),
-        })),
-      };
+      return changeCurrency(state, action);
 
     default:
       return state;

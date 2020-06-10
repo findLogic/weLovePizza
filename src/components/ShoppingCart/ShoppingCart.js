@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import ShoppingCartItem from './ShoppingCartItem/ShoppingCartItem';
 import { clearAllCartItems } from '../../actions/';
 import './ShoppingCart.scss';
+import WithPopup from '../../hoc/WithPopup';
 
 const ShoppingCart = ({ total, pizzaArray, clearAllCartItems, currency }) => {
   const [toggleShow, setToggleShow] = useState(true);
@@ -47,9 +48,13 @@ const ShoppingCart = ({ total, pizzaArray, clearAllCartItems, currency }) => {
 
   const renderCaretIcon = () => {
     return (
-      <i
-        onClick={() => setToggleShow(!toggleShow)}
-        className={`caret icon ${toggleShow ? 'up' : 'left'}`}></i>
+      <WithPopup
+        popupText={toggleShow ? 'Hide cart.' : 'Show cart'}
+        position="top center">
+        <i
+          onClick={() => setToggleShow(!toggleShow)}
+          className={`caret icon ${toggleShow ? 'up' : 'left'}`}></i>
+      </WithPopup>
     );
   };
 
@@ -60,7 +65,7 @@ const ShoppingCart = ({ total, pizzaArray, clearAllCartItems, currency }) => {
       </div>
 
       <div className="cart-top">
-        <div>
+        <div className="cart-top-with-arrow">
           Cart
           {pizzaArray.length ? (
             <>

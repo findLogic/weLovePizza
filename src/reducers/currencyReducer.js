@@ -2,6 +2,7 @@ import * as TYPES from '../actions/types';
 
 const INITIAL_STATE = {
   activeCurrency: 'euro',
+  activeCurrencyValue: 1,
 };
 
 // state = {
@@ -23,6 +24,7 @@ export default (state = INITIAL_STATE, action) => {
     case TYPES.CHANGE_CURRENCY:
       return {
         ...state,
+        activeCurrencyValue: action.payload.currencyValue,
         activeCurrency: action.payload.currency,
       };
     default:

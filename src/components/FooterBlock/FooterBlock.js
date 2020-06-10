@@ -1,5 +1,5 @@
 import React from 'react';
-import './Footer.scss';
+import './FooterBlock.scss';
 
 const Footer = () => {
   return (
@@ -9,7 +9,7 @@ const Footer = () => {
           <div className="three wide column">
             <h4 className="ui inverted header">About</h4>
             <div className="ui inverted link list">
-              <a href="#" className="item">
+              <a href="/" className="item">
                 Contact Us
               </a>
             </div>

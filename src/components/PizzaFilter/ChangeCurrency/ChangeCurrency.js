@@ -31,8 +31,10 @@ const ChangeCurrency = ({ currency, changeCurrency }) => {
   };
 
   return (
-    <div className="change-currency" onClick={() => handleButtonClick()}>
-      {renderIcons()}
+    <div className="button basic ui">
+      <div className="change-currency " onClick={() => handleButtonClick()}>
+        {renderIcons()}
+      </div>
     </div>
   );
 };
