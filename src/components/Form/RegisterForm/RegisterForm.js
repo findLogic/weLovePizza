@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 
-const RegisterForm = (props) => {
+let RegisterForm = (props) => {
   const { handleSubmit, pristine, reset, submitting } = props;
 
   return (
