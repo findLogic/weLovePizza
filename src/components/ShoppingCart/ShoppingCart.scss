@@ -59,7 +59,14 @@
     font-size: 20px;
     display: flex;
     justify-content: space-between;
+
   }
+      & .cart-bottom-button {
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        margin-top: 20px;
+      }
 
   & .clear-all-cart-items {
     cursor: pointer;

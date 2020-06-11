@@ -9,5 +9,9 @@ export const DELETE_ITEM_FROM_CART = 'DELETE_ITEM_FROM_CART';
 export const CLEAR_ALL_CART_ITEMS = 'CLEAR_ALL_CART_ITEMS';
 export const CHANGE_CURRENCY = 'CHANGE_CURRENCY';
 
-// export const TRY_TO_LOGIN_USER = 'TRY_TO_LOGIN_USER';
-export const IS_LOGGED = 'IS_LOGGED';
+export const AUTH_START = 'AUTH_START';
+export const AUTH_SUCCESS = 'AUTH_SUCCESS';
+export const AUTH_FAIL = 'AUTH_FAIL';
+export const AUTH_LOGOUT = 'AUTH_LOGOUT';
+
+export const POST_ORDER = 'POST_ORDER';

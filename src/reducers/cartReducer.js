@@ -137,9 +137,7 @@ const changeCurrency = (state, action) => {
     total: convertTotal(state.pizzaArray, action.payload.currencyValue),
     pizzaArray: state.pizzaArray.map((el) => ({
       ...el,
-      price: Math.round(
-        (el.initPrice * action.payload.currencyValue) / 100,
-      ).toFixed(2),
+      price: ((el.initPrice * action.payload.currencyValue) / 100).toFixed(2),
     })),
   };
 };

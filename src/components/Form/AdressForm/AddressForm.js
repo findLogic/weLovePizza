@@ -1,48 +1,45 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 
-const LoginForm = (props) => {
+const AddressForm = (props) => {
   const { handleSubmit, pristine, submitting } = props;
 
   return (
     <div className="container ui">
       <form className="ui form" onSubmit={handleSubmit}>
         <div className="field">
-          <label>Login</label>
+          <label>Address to deliver</label>
           <div>
             <Field
               required
               minLength="5"
-              maxLength="15"
-              name="login"
+              maxLength="150"
+              name="address"
               component="input"
               type="text"
-              placeholder="Login"
+              placeholder="Enter your address"
             />
           </div>
         </div>
-
         <div className="field">
-          <label>Password</label>
+          <label>Comment</label>
           <div>
             <Field
-              required
-              minLength="5"
-              maxLength="15"
-              name="password"
+              maxLength="150"
+              name="comment"
               component="input"
-              type="password"
-              placeholder="password"
+              type="text"
+              placeholder="Enter here comment for order"
             />
           </div>
         </div>
-
+        <p>There is no payment at all.</p>
         <div>
           <button
-            className="ui button green"
+            className="ui button green big fluid"
             type="submit"
             disabled={pristine || submitting}>
-            Submit
+            FEED ME!
           </button>
         </div>
       </form>
@@ -51,5 +48,5 @@ const LoginForm = (props) => {
 };
 
 export default reduxForm({
-  form: 'loginForm',
-})(LoginForm);
+  form: 'addressForm',
+})(AddressForm);

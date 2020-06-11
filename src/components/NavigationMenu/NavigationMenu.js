@@ -2,54 +2,57 @@ import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import Modal from '../../hoc/Modal';
 import { connect } from 'react-redux';
-import RegisterForm from '../Form/RegisterForm/RegisterForm';
-import { addNewUser, tryToLoginUser } from '../../actions';
+
+import { onTryToLogin, logout } from '../../actions';
 import './NavigationMenu.scss';
 import LoginForm from '../Form/LoginForm/LoginForm';
+import Loader from '../UI/Loader/Loader';
 
-const NavigationMenu = ({
-  regForm,
-  addNewUser,
-  tryToLoginUser,
-  loginForm,
-  isLogged,
-}) => {
+const NavigationMenu = ({ loginForm, onTryToLogin, loading, user, logout }) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
 
-  // useEffect(() => {
-  //   setShowLoginModal(isLogged);
-  //   setShowRegModal(isLogged);
-  // }, [isLogged]);
+  const [loginInput, setLoginInput] = useState('');
 
-  const onRegSubmit = () => {
-    const { email, login, name, password } = regForm.values;
-
-    addNewUser({ email, login, name, password });
-  };
+  useEffect(() => {
+    setShowLoginModal(false);
+  }, [user]);
 
   const onLoginSubmit = () => {
     const { login, password } = loginForm.values;
-    tryToLoginUser({ login, password });
+    onTryToLogin(login, password);
+    setLoginInput(login);
   };
+
+  if (loading) {
+    return <Loader></Loader>;
+  }
 
   const renderLoginLogout = () => {
-    return isLogged ? 'Logout' : 'Login';
-  };
-
-  const renderRegistration = () => {
-    return isLogged ? (
-      ''
+    return user ? (
+      <div onClick={logout} className="ui item">
+        Logout
+      </div>
     ) : (
-      <NavLink to="/registration" className="ui item">
-        Registration
-      </NavLink>
+      <div onClick={() => setShowLoginModal(true)} className="ui item">
+        Login
+      </div>
     );
   };
 
-  const renderLastOrders = () => {
-    return isLogged ? (
+  const renderLastOrder = () => {
+    return user ? (
       <NavLink to="/lastOrders" className="item" activeClassName="active">
         Last Orders
+      </NavLink>
+    ) : (
+      ''
+    );
+  };
+
+  const renderRegistration = () => {
+    return !user ? (
+      <NavLink to="/registration" className="ui item">
+        Registration
       </NavLink>
     ) : (
       ''
@@ -63,13 +66,11 @@ const NavigationMenu = ({
           <NavLink to="/" exact className="item" activeClassName="active">
             <div className="logo"> WE LOVE PIZZA</div>
           </NavLink>
-          {renderLastOrders()}
+          {renderLastOrder()}
 
           <div className="right menu">
             {renderRegistration()}
-            <div onClick={() => setShowLoginModal(true)} className="ui item">
-              {renderLoginLogout()}
-            </div>
+            {renderLoginLogout()}
           </div>
         </div>
       </div>
@@ -79,7 +80,7 @@ const NavigationMenu = ({
         header="Please Enter Your Login And Password"
         visible={showLoginModal}>
         <LoginForm
-          initialValues={{ title: 'Login Form' }}
+          initialValues={{ title: 'Login Form', login: loginInput }}
           onSubmit={onLoginSubmit}
         />
       </Modal>
@@ -88,11 +89,11 @@ const NavigationMenu = ({
 };
 
 const mapStateToProps = (state) => ({
-  isLogged: state.user.isLogged,
-  regForm: state.form.regForm,
   loginForm: state.form.loginForm,
+  loading: state.auth.loading,
+  user: state.auth.user,
 });
 
-export default connect(mapStateToProps, { addNewUser, tryToLoginUser })(
+export default connect(mapStateToProps, { onTryToLogin, logout })(
   NavigationMenu,
 );

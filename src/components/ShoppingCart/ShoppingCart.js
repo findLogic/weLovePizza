@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import ShoppingCartItem from './ShoppingCartItem/ShoppingCartItem';
 import { clearAllCartItems } from '../../actions/';
+import history from '../../history';
 import './ShoppingCart.scss';
 import WithPopup from '../../hoc/WithPopup';
 
@@ -30,6 +31,13 @@ const ShoppingCart = ({ total, pizzaArray, clearAllCartItems, currency }) => {
         <div>Total:</div>
         <div className="cart-total">
           {total} <i className={`icon sign ${currency}`}></i>
+        </div>
+      </div>
+      <div className="cart-bottom-button">
+        <div
+          onClick={() => history.push('/order')}
+          className="ui button big green">
+          FEED ME!
         </div>
       </div>
     </>

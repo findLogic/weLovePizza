@@ -1,19 +1,27 @@
 import React, { useEffect, Suspense } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-
+import { connect } from 'react-redux';
 import OrderPage from '../Pages/OrderPage/OrderPage';
 import Layout from '../../hoc/Layout';
 import './App.scss';
-import RegistrationPage from '../Pages/RegistrationPage/RegistrationPage';
 import Loader from '../UI/Loader/Loader';
+import RegistrationPage from '../Pages/RegistrationPage/RegistrationPage';
+import LastOrders from '../Pages/LastOrders/LastOrders';
+import { checkLocalStorageUser } from '../../actions';
+
 const MainPage = React.lazy(() => import('../Pages/MainPage/MainPage'));
 
-const App = () => {
+const App = ({ checkLocalStorageUser }) => {
+  useEffect(() => {
+    checkLocalStorageUser();
+  }, []);
+
   const routes = (
     <Switch>
       <Route path="/" exact component={MainPage} />
       <Route path="/registration" exact component={RegistrationPage} />
       <Route path="/order" exact component={OrderPage} />
+      <Route path="/lastOrders" exact component={LastOrders} />
       <Redirect to="/" />
     </Switch>
   );
@@ -25,4 +33,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default connect(null, { checkLocalStorageUser })(App);

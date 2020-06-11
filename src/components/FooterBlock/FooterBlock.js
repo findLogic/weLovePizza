@@ -9,9 +9,7 @@ const Footer = () => {
           <div className="three wide column">
             <h4 className="ui inverted header">About</h4>
             <div className="ui inverted link list">
-              <a href="/" className="item">
-                Contact Us
-              </a>
+              <div className="item">Some info will be here</div>
             </div>
           </div>
 
